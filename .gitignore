@@ -1,3 +1,7 @@
+__pycache__/
 .venv/
+checkpoints/
 lightning_logs/
 MNIST/
+outputs/
+optuna.db

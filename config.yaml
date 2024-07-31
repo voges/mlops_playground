@@ -1,0 +1,26 @@
+hydra:
+  job_logging:
+    formatters:
+      simple:
+        format: "%(asctime)s - %(levelname)s - %(message)s"
+
+optuna:
+  study_name: "mlops-playground-tests"
+  db_path: "sqlite:///optuna.db"
+  n_trials: 2
+
+mlflow:
+  enabled: true
+  tracking_uri: "http://juno:5200"
+
+lightning:
+  checkpoint_path: "checkpoints"
+
+train:
+  max_epochs: 10
+  batch_size: 32
+  learning_rate: 1e-3
+
+data:
+  num_workers: 4
+  num_train_samples: 10000
