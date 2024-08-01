@@ -1,5 +1,7 @@
 import logging
 import requests
+import subprocess
+from typing import Optional
 
 import torch
 
@@ -62,3 +64,17 @@ def initialize_mlflow_logger(
 def identify_device() -> torch.device:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     return device
+
+
+def get_git_root() -> Optional[str]:
+    try:
+        git_root = (
+            subprocess.check_output(
+                ["git", "rev-parse", "--show-toplevel"], stderr=subprocess.STDOUT
+            )
+            .decode("utf-8")
+            .strip()
+        )
+        return git_root
+    except subprocess.CalledProcessError:
+        return None

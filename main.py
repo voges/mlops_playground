@@ -7,7 +7,7 @@ import optuna
 
 from data import load_data, create_data_loaders
 from models import AutoEncoder
-from utils import log_config, initialize_mlflow_logger, identify_device
+from utils import log_config, initialize_mlflow_logger, identify_device, get_git_root
 
 log = logging.getLogger(__name__)
 
@@ -68,6 +68,7 @@ class Objective:
 @hydra.main(version_base=None, config_path=".", config_name="config")
 def main(cfg: DictConfig) -> None:
     log_config(cfg=cfg)
+    log.info(f"Git root: {get_git_root()}")
     log.info(f"Using device: {identify_device()}")
 
     study = optuna.create_study(
