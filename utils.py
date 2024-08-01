@@ -4,14 +4,18 @@ import requests
 from omegaconf import DictConfig, OmegaConf
 from lightning.pytorch.loggers import MLFlowLogger
 
-
 log = logging.getLogger(__name__)
 
 
-def check_server(uri: str) -> bool:
+def check_server(uri: str, timeout: int = 5) -> bool:
+    """Check if the server is available."""
     try:
-        response = requests.get(url=f"{uri}")
-        return response.status_code == 200
+        response = requests.get(url=uri, timeout=timeout)
+        if response.status_code == 200:
+            return True
+        else:
+            log.warning(f"Server responded with status code: {response.status_code}")
+            return False
     except requests.exceptions.RequestException as e:
         log.error(f"Error connecting to server: {e}")
         return False
