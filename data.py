@@ -11,8 +11,8 @@ def load_data():
     # represented as a grayscale image of size 28x28 pixels. When the dataset is loaded,
     # the images are transformed into tensors using the transforms.ToTensor() function.
     # The resulting tensor has a shape of (1, 28, 28), where 1 represents the number of
-    # color channels (grayscale images have only one channel), and 28 represents the height
-    # and width of the image.
+    # color channels (grayscale images have only one channel), and 28 represents the
+    # height and width of the image.
     # The dataset also contains corresponding labels for each image, indicating the
     # digit it represents. The labels are integers ranging from 0 to 9.
     # Overall, the MNIST dataset consists of a collection of 60,000 training images
@@ -31,21 +31,19 @@ def load_data():
 
 
 def create_data_loaders(cfg, train_set, test_set):
-    # Create a random sampler to sample 10,000 images from the training set with
-    # replacement.
     random_sampler = RandomSampler(
         data_source=train_set,
         replacement=True,
         num_samples=cfg.data.num_train_samples,
     )
 
-    # Create data loaders for the training set and the test set.
     train_loader = DataLoader(
         dataset=train_set,
         batch_size=cfg.train.batch_size,
         sampler=random_sampler,
         num_workers=cfg.data.num_workers,
     )
+
     test_loader = DataLoader(dataset=test_set, num_workers=cfg.data.num_workers)
 
     return train_loader, test_loader
