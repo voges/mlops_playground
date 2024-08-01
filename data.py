@@ -4,6 +4,8 @@ from torchvision.datasets import MNIST
 from torchvision import transforms
 from torch.utils.data import DataLoader, RandomSampler
 
+from omegaconf import DictConfig
+
 
 def load_data():
     # Load the MNIST dataset.
@@ -30,7 +32,7 @@ def load_data():
     return train_set, test_set
 
 
-def create_data_loaders(cfg, train_set, test_set):
+def create_data_loaders(cfg: DictConfig, train_set, test_set):
     random_sampler = RandomSampler(
         data_source=train_set,
         replacement=True,
