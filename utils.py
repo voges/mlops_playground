@@ -1,6 +1,8 @@
 import logging
 import requests
 
+import torch
+
 from omegaconf import DictConfig, OmegaConf
 from lightning.pytorch.loggers import MLFlowLogger
 
@@ -22,11 +24,13 @@ def check_server(uri: str, timeout: int = 5) -> bool:
 
 
 def log_config(cfg: DictConfig) -> None:
+    log.info("")
     log.info("Configuration:")
     log.info("--------------")
     yaml_str = OmegaConf.to_yaml(cfg=cfg)
     for line in yaml_str.splitlines():
         log.info(f"  {line}")
+    log.info("")
 
 
 def initialize_mlflow_logger(
@@ -53,3 +57,8 @@ def initialize_mlflow_logger(
     except Exception as e:
         log.error(f"Failed to initialize MLFlowLogger: {e}")
         return None
+
+
+def identify_device() -> torch.device:
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    return device
