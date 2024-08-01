@@ -5,7 +5,7 @@ hydra:
         format: "%(asctime)s - %(levelname)s - %(message)s"
 
 optuna:
-  study_name: "mlops-playground-tests"
+  study_name: "mlops-playground-optimization"
   db_path: "sqlite:///optuna.db"
   n_trials: 2
 
