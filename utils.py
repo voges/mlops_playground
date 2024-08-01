@@ -32,17 +32,24 @@ def log_config(cfg: DictConfig) -> None:
 def initialize_mlflow_logger(
     cfg: DictConfig, experiment_name: str, run_name: str
 ) -> MLFlowLogger:
-    mlf_logger = None
-    if cfg.mlflow.enabled:
-        if not check_server(uri=cfg.mlflow.tracking_uri):
-            log.error("MLflow tracking server not available.")
-        else:
-            log.info(f"MLflow experiment name: {experiment_name}")
-            log.info(f"MLflow run name: {run_name}")
+    if not cfg.mlflow.enabled:
+        log.info("MLflow is not enabled in the configuration.")
+        return None
 
-            mlf_logger = MLFlowLogger(
-                experiment_name=experiment_name,
-                run_name=run_name,
-                tracking_uri=cfg.mlflow.tracking_uri,
-            )
-    return mlf_logger
+    if not check_server(uri=cfg.mlflow.tracking_uri):
+        log.error("MLflow tracking server not available.")
+        return None
+
+    log.info(f"MLflow experiment name: {experiment_name}")
+    log.info(f"MLflow run name: {run_name}")
+
+    try:
+        mlf_logger = MLFlowLogger(
+            experiment_name=experiment_name,
+            run_name=run_name,
+            tracking_uri=cfg.mlflow.tracking_uri,
+        )
+        return mlf_logger
+    except Exception as e:
+        log.error(f"Failed to initialize MLFlowLogger: {e}")
+        return None
