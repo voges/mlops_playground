@@ -5,9 +5,8 @@ import torch.nn.functional as F
 import lightning as L
 
 
-# Encoder class that takes an input image and encodes it into a lower-dimensional
-# representation.
 class Encoder(nn.Module):
+    """Encode an input image into a lower-dimensional representation."""
     def __init__(self, latent_dim: int) -> None:
         super().__init__()
         self.l1 = nn.Sequential(
@@ -20,9 +19,8 @@ class Encoder(nn.Module):
         return self.l1(x)
 
 
-# Decoder class that takes the encoded representation and reconstructs the original
-# image.
 class Decoder(nn.Module):
+    """Decode a lower-dimensional representation into an image."""
     def __init__(self, latent_dim: int) -> None:
         super().__init__()
         self.l1 = nn.Sequential(
@@ -44,7 +42,7 @@ class AutoEncoder(L.LightningModule):
 
     def training_step(self, batch):
         x, _ = batch
-        x = x.view(x.size(0), -1)  # Flatten the input image.
+        x = x.view(x.size(0), -1)  # Flatten the input image
         z = self.encoder(x)
         x_hat = self.decoder(z)
         train_loss = F.mse_loss(input=x_hat, target=x)
@@ -53,7 +51,7 @@ class AutoEncoder(L.LightningModule):
 
     def test_step(self, batch):
         x, _ = batch
-        x = x.view(x.size(0), -1)  # Flatten the input image.
+        x = x.view(x.size(0), -1)  # Flatten the input image
         z = self.encoder(x)
         x_hat = self.decoder(z)
         test_loss = F.mse_loss(input=x_hat, target=x)
