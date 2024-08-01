@@ -8,7 +8,7 @@ import lightning as L
 # Encoder class that takes an input image and encodes it into a lower-dimensional
 # representation.
 class Encoder(nn.Module):
-    def __init__(self, latent_dim):
+    def __init__(self, latent_dim: int) -> None:
         super().__init__()
         self.l1 = nn.Sequential(
             nn.Linear(in_features=28 * 28, out_features=64),
@@ -23,7 +23,7 @@ class Encoder(nn.Module):
 # Decoder class that takes the encoded representation and reconstructs the original
 # image.
 class Decoder(nn.Module):
-    def __init__(self, latent_dim):
+    def __init__(self, latent_dim: int) -> None:
         super().__init__()
         self.l1 = nn.Sequential(
             nn.Linear(in_features=latent_dim, out_features=64),
@@ -36,7 +36,7 @@ class Decoder(nn.Module):
 
 
 class AutoEncoder(L.LightningModule):
-    def __init__(self, lr, latent_dim):
+    def __init__(self, lr: float, latent_dim: int) -> None:
         super().__init__()
         self.encoder = Encoder(latent_dim=latent_dim)
         self.decoder = Decoder(latent_dim=latent_dim)
