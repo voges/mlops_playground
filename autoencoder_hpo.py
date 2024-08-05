@@ -5,9 +5,14 @@ from omegaconf import DictConfig
 import hydra
 import optuna
 
-from data import load_data, create_data_loaders
-from models import AutoEncoder
-from utils import log_config, initialize_mlflow_logger, identify_device, get_git_root
+from mlops_playground.data import load_data, create_data_loaders
+from mlops_playground.models import AutoEncoder
+from mlops_playground.utils import (
+    log_config,
+    initialize_mlflow_logger,
+    identify_device,
+    get_git_root,
+)
 
 log = logging.getLogger(__name__)
 
@@ -65,7 +70,7 @@ class Objective:
         return test_loss
 
 
-@hydra.main(version_base=None, config_path=".", config_name="config")
+@hydra.main(version_base=None, config_path="configs", config_name="autoencoder_hpo")
 def main(cfg: DictConfig) -> None:
     log_config(cfg=cfg)
     log.info(f"Git root: {get_git_root()}")
@@ -79,6 +84,8 @@ def main(cfg: DictConfig) -> None:
     )
 
     study.optimize(func=Objective(cfg=cfg), n_trials=cfg.optuna.n_trials)
+
+    log.info(f"Best parameters: {study.best_trial.params}")
 
 
 if __name__ == "__main__":
