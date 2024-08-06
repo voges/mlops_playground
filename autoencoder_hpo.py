@@ -72,20 +72,23 @@ class Objective:
 
 @hydra.main(version_base=None, config_path="configs", config_name="autoencoder_hpo")
 def main(cfg: DictConfig) -> None:
-    log_config(cfg=cfg)
-    log.info(f"Git root: {get_git_root()}")
-    log.info(f"Using device: {identify_device()}")
+    try:
+        log_config(cfg=cfg)
+        log.info(f"Git root: {get_git_root()}")
+        log.info(f"Using device: {identify_device()}")
 
-    study = optuna.create_study(
-        study_name=cfg.optuna.study_name,
-        direction="minimize",
-        storage=cfg.optuna.db_path,
-        load_if_exists=True,
-    )
+        study = optuna.create_study(
+            study_name=cfg.optuna.study_name,
+            direction="minimize",
+            storage=cfg.optuna.db_path,
+            load_if_exists=True,
+        )
 
-    study.optimize(func=Objective(cfg=cfg), n_trials=cfg.optuna.n_trials)
+        study.optimize(func=Objective(cfg=cfg), n_trials=cfg.optuna.n_trials)
 
-    log.info(f"Best parameters: {study.best_trial.params}")
+        log.info(f"Best parameters: {study.best_trial.params}")
+    except Exception as e:
+        log.error(f"An error occurred: {e}")
 
 
 if __name__ == "__main__":
