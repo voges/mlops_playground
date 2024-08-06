@@ -1,17 +1,17 @@
-# Python bytecode cache directory
+# Python bytecode cache directories
 __pycache__/
 
 # Virtual environment directory
-.venv/
+/.venv/
 
 # PyTorch Lightning checkpoints
-checkpoints/
+/checkpoints/
 
 # MNIST dataset directory
-MNIST/
+/MNIST/
 
 # Hydra outputs
-outputs/
+/outputs/
 
 # Optuna database file
-optuna.db
+/optuna.db
