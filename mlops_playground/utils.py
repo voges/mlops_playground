@@ -12,7 +12,16 @@ log = logging.getLogger(__name__)
 
 
 def check_server(uri: str, timeout: int = 5) -> bool:
-    """Checks if the server is available."""
+    """
+    Check if the server is available.
+
+    Args:
+        uri: The URI of the server.
+        timeout: The timeout in seconds.
+
+    Returns:
+        True if the server is available, False otherwise.
+    """
     try:
         response = requests.get(url=uri, timeout=timeout)
         if response.status_code == 200:
@@ -25,15 +34,29 @@ def check_server(uri: str, timeout: int = 5) -> bool:
         return False
 
 
+def log_yaml(yaml_dump: str) -> None:
+    """
+    Pretty log of a YAML dump.
+
+    Args:
+        yaml_dump: The YAML dump to log.
+    """
+    for line in yaml_dump.splitlines():
+        log.info(f"{line}")
+    log.info("")
+
+
 def log_config(cfg: DictConfig) -> None:
-    """Logs the configuration in YAML format."""
+    """
+    Pretty log of a Hydra configuration.
+
+    Args:
+        cfg: The configuration object.
+    """
     log.info("")
     log.info("Configuration:")
     log.info("--------------")
-    yaml_str = OmegaConf.to_yaml(cfg=cfg)
-    for line in yaml_str.splitlines():
-        log.info(f"{line}")
-    log.info("")
+    log_yaml(yaml_dump=OmegaConf.to_yaml(cfg=cfg))
 
 
 def initialize_mlflow_logger(
@@ -68,7 +91,12 @@ def identify_device() -> torch.device:
 
 
 def get_git_root() -> Optional[str]:
-    """Returns the root directory of the current Git repository."""
+    """
+    Return the root directory of the current Git repository.
+
+    Returns:
+        The root directory of the current Git repository, or None if the command fails.
+    """
     try:
         return subprocess.check_output(
             args=["git", "rev-parse", "--show-toplevel"],

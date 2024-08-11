@@ -6,7 +6,8 @@ import lightning as L
 
 
 class Encoder(nn.Module):
-    """Encode an input image into a lower-dimensional representation."""
+    """MLP encoder."""
+
     def __init__(self, latent_dim: int) -> None:
         super().__init__()
         self.l1 = nn.Sequential(
@@ -20,7 +21,8 @@ class Encoder(nn.Module):
 
 
 class Decoder(nn.Module):
-    """Decode a lower-dimensional representation into an image."""
+    """MLP decoder."""
+
     def __init__(self, latent_dim: int) -> None:
         super().__init__()
         self.l1 = nn.Sequential(
